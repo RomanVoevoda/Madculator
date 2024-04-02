@@ -1,3 +1,10 @@
+@media screen and (max-width: 768px) {
+  div.display {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+}
+
 .madculator{
   display: flex;
   flex-direction: column;
@@ -19,6 +26,7 @@
 
 .display-container{
   padding: 1rem;
+  max-width: 100%;
 }
 
 .display{
@@ -47,6 +55,24 @@
   color: #141010;
   font-size: var(--display-font-size);
   padding: 0 0.3rem;
+  -webkit-animation: flickering 10s linear infinite;
+          animation: flickering 10s linear infinite;
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+
+@-webkit-keyframes flickering {
+  0%{opacity: 1; transform: scale3d(1.01, 1.01, 1.05);}
+  25%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
+  50%{opacity: 0.8; transform: scale3d(1.01, 1.01, 1.05);}
+  75%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
+}
+
+@keyframes flickering {
+  0%{opacity: 1; transform: scale3d(1.01, 1.01, 1.05);}
+  25%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
+  50%{opacity: 0.8; transform: scale3d(1.01, 1.01, 1.05);}
+  75%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
 }
 
 .buttons-container{

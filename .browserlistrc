@@ -1,0 +1,8 @@
+[production]
+> 0.3%
+
+[modern]
+last 10 versions
+
+[ssr]
+node 12
