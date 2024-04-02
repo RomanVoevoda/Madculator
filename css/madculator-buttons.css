@@ -1,16 +1,19 @@
-.madculator-black-button{
+.madculator-black-button,
+.fake-black-button{
   background-color: #141010;
   outline-color: #050404;
   flex: 0 0 auto;
 }
 
-.madculator-normal-button{
+.madculator-normal-button,
+.fake-normal-button{
   background-color: #455d7a;
   outline-color: #11171f;
   flex: 0 0 auto;
 }
 
-.madculator-orange-button{
+.madculator-orange-button,
+.fake-orange-button{
   background-color: #f96d00;
   outline-color: #3f1b00;
   flex: 0 0 auto;
@@ -23,7 +26,10 @@
 
 .madculator-black-button,
 .madculator-normal-button,
-.madculator-orange-button{
+.madculator-orange-button,
+.fake-black-button,
+.fake-normal-button,
+.fake-orange-button{
   position: relative;
   font-size: var(--madculator-normal-button-size);
   color: #f2f2f2;
@@ -42,14 +48,24 @@
 
 .madculator-black-button:hover,
 .madculator-normal-button:hover,
-.madculator-orange-button:hover{
+.madculator-orange-button:hover,
+.fake-black-button:hover,
+.fake-normal-button:hover,
+.fake-orange-button:hover{
   color: #e3e3e3;
   cursor: pointer;
 }
 
 .madculator-black-button:active,
 .madculator-normal-button:active,
-.madculator-orange-button:active{
+.madculator-orange-button:active,
+.fake-black-button:active:active,
+.fake-normal-button:active,
+.fake-orange-button:active{
   transform: scale3d(1, 1, 1);
   box-shadow: 0 -5px 0 3px rgba(0,0,0,0.75) inset;
+}
+
+.destroy-fake-button{
+  display: none;
 }

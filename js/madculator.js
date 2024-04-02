@@ -14,6 +14,40 @@ const madculator = {
     return this;
   },
 
+  roll(min, max) {
+    let rand = min + Math.random() * (max + 1 - min);
+    return Math.floor(rand);
+  },
+  createFakeButton(className) {
+    const buttonsContainer = document.querySelector('.buttons-container');
+    const fakeButton = document.createElement('div');
+    fakeButton.setAttribute('class', className);
+
+    let randomOrder = this.roll(0, 20).toString();
+    fakeButton.setAttribute('style', 'order:' + randomOrder);
+
+    let randomButtonsArrayLenght = inputButtonsValue.length;
+    let randomButtonsArrayIndex = this.roll(0, randomButtonsArrayLenght - 1);
+    fakeButton.innerHTML = inputButtonsValue[randomButtonsArrayIndex].innerHTML;
+
+    fakeButton.addEventListener('click', 
+      function() {
+        fakeButton.classList.add('destroy-fake-button');
+      }
+    );
+
+    buttonsContainer.appendChild(fakeButton);
+  },
+  setRandomOrder() {
+    const buttonsArray = document.querySelectorAll('.buttons-container div');
+    let buttonsArrayLenght = buttonsArray.length;
+
+    for(let i = 0; i < buttonsArrayLenght; i++){
+      let randomOrder = this.roll(0, buttonsArrayLenght - 1).toString();
+      buttonsArray[i].setAttribute('style', 'order:' + randomOrder);
+    }
+  },
+
   header: "<div class='header ubuntu-mono-regular'><p>CASIO</p></div>",
 
   display: "<div class='display-container kode-mono-display-font'><div class='display starting-value'><p id='display-text'></p></div></div>",
@@ -147,3 +181,41 @@ deleteButton.addEventListener('click',
     }
   }
 );
+
+//Дальше события madculator'a
+const orangeButtons = document.getElementsByClassName('madculator-orange-button');
+const blackButtons = document.getElementsByClassName('madculator-black-button');
+const normalButtons = document.getElementsByClassName('madculator-normal-button');
+
+for(let i = 0; i < orangeButtons.length; i++) {
+  orangeButtons[i].addEventListener('click', 
+  () => {
+    if(display.classList.contains('on')) {
+      madculator.createFakeButton('fake-orange-button');
+      madculator.createFakeButton('fake-orange-button');
+      madculator.setRandomOrder();
+    }
+  });
+}
+
+for(let i = 0; i < blackButtons.length; i++) {
+  blackButtons[i].addEventListener('click', 
+  () => {
+    if(display.classList.contains('on')) {
+      madculator.createFakeButton('fake-black-button');
+      madculator.createFakeButton('fake-black-button');
+      madculator.setRandomOrder();
+    }
+  });
+}
+
+for(let i = 0; i < normalButtons.length; i++) {
+  normalButtons[i].addEventListener('click', 
+  () => {
+    if(display.classList.contains('on')) {
+      madculator.createFakeButton('fake-normal-button');
+      madculator.createFakeButton('fake-normal-button');
+      madculator.setRandomOrder();
+    } 
+  });
+}
