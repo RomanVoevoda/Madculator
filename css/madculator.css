@@ -25,17 +25,28 @@
   height: 5rem;
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
-  background-color: #ddeedf;
-  box-shadow: 0 -0 0px 0.3rem #393e46 inset;
+  background-color: #b6cdbd;
+  box-shadow: 0 0 0 0.3rem #393e46 inset;
   outline-color: #393e46;
   outline-style: solid;
   outline-width: 0.2rem;
   outline-offset: -1px;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
 }
 
-.display-text{
+.on{
+  background-color: #ddeedf;
+  box-shadow: 0 0 0 0.2rem #393e46 inset,
+    0 0 0 0.3rem rgba(57, 62, 70, 0.6) inset,
+    0 0 0.3rem 0.3rem #f2f9f1 inset;
+}
+
+#display-text{
   color: #141010;
   font-size: var(--display-font-size);
+  padding: 0 0.3rem;
 }
 
 .buttons-container{
