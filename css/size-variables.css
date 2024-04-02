@@ -1,7 +1,8 @@
 :root{
-  --header-font-size: 2.5rem;
+  --display-font-size: 4.6rem;
   --normal-font-size: 2.1rem;
   --smaller-font-size: 1.8rem;
   --normal-text-indent: 1rem;
-  --madculator-button-font-size: 3rem;
+  --madculator-normal-button-size: 2.5rem;
+  --madculator-smaller-button-size: 2.3rem;
 }
