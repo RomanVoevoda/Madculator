@@ -142,7 +142,7 @@ equalButton.addEventListener('click',
   function() {
     if(display.classList.contains('on')) {
       //Используется бибилиотека Math js, чтобы снизить риски безопасности метода eval()
-      madculator['display-text-value'] = math.evaluate(madculator['display-text-value']);
+      madculator['display-text-value'] = (math.evaluate(madculator['display-text-value'])).toString();
       display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
     }  
   }
