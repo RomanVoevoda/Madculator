@@ -19,7 +19,7 @@ const madculator = {
       console.log(dotPosition);
       return string = string.slice(0, dotPosition + 5);
     } else {
-      return;
+      return string;
     }
   },
 
