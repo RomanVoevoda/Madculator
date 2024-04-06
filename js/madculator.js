@@ -13,6 +13,15 @@ const madculator = {
     this.setBody();
     return this;
   },
+  fixingFractionLength(string) {
+    if(string.includes('.')) {
+      let dotPosition = string.indexOf('.');
+      console.log(dotPosition);
+      return string = string.slice(0, dotPosition + 5);
+    } else {
+      return;
+    }
+  },
 
   roll(min, max) {
     let rand = min + Math.random() * (max + 1 - min);
@@ -142,7 +151,9 @@ equalButton.addEventListener('click',
   function() {
     if(display.classList.contains('on')) {
       //Используется бибилиотека Math js, чтобы снизить риски безопасности метода eval()
-      madculator['display-text-value'] = (math.evaluate(madculator['display-text-value'])).toString();
+      let result = (math.evaluate(madculator['display-text-value'])).toString();
+
+      madculator['display-text-value'] = madculator.fixingFractionLength(result);
       display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
     }  
   }
