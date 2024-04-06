@@ -22,6 +22,18 @@ const madculator = {
       return string;
     }
   },
+  zerosAbbrevation(string) {
+    if(string.endsWith('00000')) {
+      let numberOfZeros = 5;
+
+      for(let i = string.length - 5; (string.at(i - 1) === '0') && (i >= 0); i--) {
+        numberOfZeros++;
+      }
+      return string = string.slice(0, string.length - numberOfZeros) + `e${numberOfZeros}`;
+    } else {
+      return string;
+    }
+  },
 
   roll(min, max) {
     let rand = min + Math.random() * (max + 1 - min);
@@ -152,8 +164,9 @@ equalButton.addEventListener('click',
     if(display.classList.contains('on')) {
       //Используется бибилиотека Math js, чтобы снизить риски безопасности метода eval()
       let result = (math.evaluate(madculator['display-text-value'])).toString();
+      let fixedFractionResult = madculator.fixingFractionLength(result);
 
-      madculator['display-text-value'] = madculator.fixingFractionLength(result);
+      madculator['display-text-value'] = madculator.zerosAbbrevation(fixedFractionResult);
       display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
     }  
   }
