@@ -30,7 +30,7 @@
 }
 
 .display{
-  height: 5rem;
+  height: 6rem;
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
   background-color: #b6cdbd;
@@ -55,6 +55,7 @@
   color: #141010;
   font-size: var(--display-font-size);
   padding: 0 0.3rem;
+  word-spacing: 0;
   -webkit-animation: flickering 10s linear infinite;
           animation: flickering 10s linear infinite;
   -webkit-animation-play-state: running;

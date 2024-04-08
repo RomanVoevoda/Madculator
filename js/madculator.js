@@ -35,6 +35,83 @@ const madculator = {
     }
   },
 
+  calculate(str) {
+    let arrayForCalculation = str.split('<span></span>'); 
+    madculator.arrayCleaning(arrayForCalculation); //отчистка от пустых спанов и дыр в массиве только для лучшей обработки ошибок
+    
+    let highPriorityOperators = madculator.findOperators(arrayForCalculation, '*', '/', '%');
+    let lessPriorityOperators = madculator.findOperators(arrayForCalculation, '+', '-');
+
+    while(highPriorityOperators != undefined) {
+      madculator.partialCalculation(arrayForCalculation, highPriorityOperators);
+
+      if(isNaN(arrayForCalculation[0])) {
+        return arrayForCalculation[0] = 'Ошибка!';
+      }
+
+      highPriorityOperators = madculator.findOperators(arrayForCalculation, '*', '/', '%'); 
+    }
+
+    while(lessPriorityOperators != undefined) {
+      madculator.partialCalculation(arrayForCalculation, lessPriorityOperators);
+
+      if(isNaN(arrayForCalculation[0])) {
+        return arrayForCalculation[0] = 'Ошибка!';
+      }
+
+
+      lessPriorityOperators = madculator.findOperators(arrayForCalculation, '+', '-');
+    }
+
+    return str = arrayForCalculation[0];
+  },
+  findOperators(arr, operator1, operator2, operator3){
+    let operatorsIndex = [];
+    let operatorsValue = [];
+
+    if(arr.includes(operator1) || arr.includes(operator2) || arr.includes(operator3)) {
+      for(let item of arr) {
+        if(item === operator1 || item === operator2 || item === operator3) {
+          operatorsIndex.push( arr.indexOf(item) );
+          operatorsValue.push(item);
+        }  
+      }
+    } else {
+      return undefined;
+    }
+
+    return [operatorsIndex, operatorsValue];
+  },
+  partialCalculation(calculationArray, arrayOfOperators) {
+
+    if (isNaN(calculationArray[arrayOfOperators[0][0] - 1]) || isNaN(calculationArray[arrayOfOperators[0][0] + 1])) {
+      return calculationArray[0] = NaN;
+    }
+
+    let a = Number(calculationArray[arrayOfOperators[0][0] - 1]);
+    let op = arrayOfOperators[1][0];
+    let b = Number(calculationArray[arrayOfOperators[0][0] + 1]);
+
+    calculationArray[arrayOfOperators[0][0] - 1] = madculator.methods[op](a, b);
+
+    calculationArray.splice(arrayOfOperators[0][0], 2);
+  },
+  methods: {
+    '-': (a, b) => a - b, 
+    '+': (a, b) => a + b,
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
+    '%': (a, b) => a % b,
+  },
+  arrayCleaning(arrayForCleaning) {
+    while(arrayForCleaning.includes('')){
+      arrayForCleaning.splice(arrayForCleaning.indexOf(''), 1);
+    }
+
+    arrayForCleaning.flat();
+  },
+
+
   roll(min, max) {
     let rand = min + Math.random() * (max + 1 - min);
     return Math.floor(rand);
@@ -88,11 +165,11 @@ const madculator = {
     },
 
     //Порядок прописан прямо здесь, так как нет смысла выделять его в отдельные классы
-    'plus-button': "<div class='madculator-black-button input-button' style='order:16'><p>+</p></div>",
-    'minus-button': "<div class='madculator-black-button input-button' style='order:12'><p>-</p></div>",
-    'multiplication-button': "<div class='madculator-black-button input-button' style='order:8'><p>*</p></div>",
-    'degree-button': "<div class='madculator-black-button input-button' style='order:4'><p>/</p></div>",
-    'percentagee-button': "<div class='madculator-black-button input-button' style='order:3'><p>%</p></div>",
+    'plus-button': "<div class='madculator-black-button input-button methods-button' style='order:16'><p>+</p></div>",
+    'minus-button': "<div class='madculator-black-button input-button methods-button' style='order:12'><p>-</p></div>",
+    'multiplication-button': "<div class='madculator-black-button input-button methods-button' style='order:8'><p>*</p></div>",
+    'degree-button': "<div class='madculator-black-button input-button methods-button' style='order:4'><p>/</p></div>",
+    'percentagee-button': "<div class='madculator-black-button input-button methods-button' style='order:3'><p>%</p></div>",
 
     'delete-button': "<div class='madculator-orange-button icon-button' id='delete-button' style='order:2'><i class='fa-solid fa-delete-left'></i></div>",
     'clear-button': "<div class='madculator-orange-button' id='clear-button' style='order:1'><p>С</p></div>",
@@ -149,6 +226,7 @@ for(let i = 0; i < inputButtons.length; i++) {
         display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag']; //Без этого значения на дисплее не меняются
         display.classList.remove('starting-value');
       } else {
+        inputButtons[i].classList.contains('methods-button') ? madculator['display-text-value'] = madculator['display-text-value'] + '<span></span>' + inputButtonsValue[i].innerText + '<span></span>': 
         madculator['display-text-value'] = madculator['display-text-value'] + inputButtonsValue[i].innerText;
         display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
       }     
@@ -163,7 +241,7 @@ equalButton.addEventListener('click',
   function() {
     if(display.classList.contains('on')) {
       //Используется бибилиотека Math js, чтобы снизить риски безопасности метода eval()
-      let result = (math.evaluate(madculator['display-text-value'])).toString();
+      let result = (madculator.calculate(madculator['display-text-value'])).toString();
       let fixedFractionResult = madculator.fixingFractionLength(result);
 
       madculator['display-text-value'] = madculator.zerosAbbrevation(fixedFractionResult);
