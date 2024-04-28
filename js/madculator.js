@@ -145,6 +145,11 @@ const madculator = {
       buttonsArray[i].setAttribute('style', 'order:' + randomOrder);
     }
   },
+  rotateMadculator() {
+    const madculatorContainer = document.querySelector('.madculator');
+
+    madculatorContainer.setAttribute('style', `transform: rotate(${madculator.roll(0, 361)}deg);`)
+  },
 
   header: "<div class='header ubuntu-mono-regular'><p>CASIO</p></div>",
 
@@ -296,6 +301,7 @@ for(let i = 0; i < orangeButtons.length; i++) {
       madculator.createFakeButton('fake-orange-button');
       madculator.createFakeButton('fake-orange-button');
       madculator.setRandomOrder();
+      madculator.rotateMadculator();
     }
   });
 }
@@ -307,6 +313,7 @@ for(let i = 0; i < blackButtons.length; i++) {
       madculator.createFakeButton('fake-black-button');
       madculator.createFakeButton('fake-black-button');
       madculator.setRandomOrder();
+      madculator.rotateMadculator();
     }
   });
 }
@@ -318,6 +325,7 @@ for(let i = 0; i < normalButtons.length; i++) {
       madculator.createFakeButton('fake-normal-button');
       madculator.createFakeButton('fake-normal-button');
       madculator.setRandomOrder();
+      madculator.rotateMadculator();
     } 
   });
 }
