@@ -1,5 +1,41 @@
-@media screen and (max-width: 768px) {
-  div.display {
+@media(hover: hover) {
+  .display::-webkit-scrollbar {
+    display: none;
+  }
+  
+  #display-text{
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+  
+  #display-text::-webkit-scrollbar {
+    height: 0.5rem;
+  }
+
+  #display-text::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #display-text::-webkit-scrollbar-thumb {
+    background-color: #393e46; 
+    border-radius: 30%; 
+    border: 1px solid #393e46;
+    border-bottom-color: #393e46;
+  }
+
+  #display-text::-webkit-scrollbar-thumb:hover {
+    cursor: -webkit-grab;
+    cursor: grab;
+  }
+
+  #display-text::-webkit-scrollbar-thumb:active {
+    cursor: -webkit-grabbing;
+    cursor: grabbing;
+  }
+}
+
+@media(hover: none){
+  .display{
     overflow-x: scroll;
     overflow-y: hidden;
   }
@@ -31,6 +67,7 @@
 }
 
 .display{
+  max-width: 29rem;
   height: 6rem;
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
@@ -57,24 +94,26 @@
   font-size: var(--display-font-size);
   padding: 0 0.3rem;
   word-spacing: 0;
-  -webkit-animation: flickering 10s linear infinite;
-          animation: flickering 10s linear infinite;
+  -webkit-animation: flickering 5s linear infinite;
+          animation: flickering 5s linear infinite;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
 
 @-webkit-keyframes flickering {
-  0%{opacity: 1; transform: scale3d(1.01, 1.01, 1.05);}
+  0%{opacity: 1;}
   25%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
   50%{opacity: 0.8; transform: scale3d(1.01, 1.01, 1.05);}
   75%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
+  100%{opacity: 1;}
 }
 
 @keyframes flickering {
-  0%{opacity: 1; transform: scale3d(1.01, 1.01, 1.05);}
+  0%{opacity: 1;}
   25%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
   50%{opacity: 0.8; transform: scale3d(1.01, 1.01, 1.05);}
   75%{opacity: 0.9; transform: scale3d(1, 1, 1.02);}
+  100%{opacity: 1;}
 }
 
 .buttons-container{
