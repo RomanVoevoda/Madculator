@@ -13,25 +13,24 @@ const madculator = {
     this.setBody();
     return this;
   },
-  fixingFractionLength(string) {
-    if(string.includes('.')) {
-      let dotPosition = string.indexOf('.');
-      console.log(dotPosition);
-      return string = string.slice(0, dotPosition + 5);
-    } else {
-      return string;
-    }
+  refreshMadculator() {
+    display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
   },
-  zerosAbbrevation(string) {
-    if(string.endsWith('00000')) {
+
+  fixingFractionLength(result) {
+    return (result.includes('.')) ? result.slice(0, result.indexOf('.') + 5) :  result;
+  },
+  zerosAbbrevation(result) {
+    if(result.endsWith('00000')) {
       let numberOfZeros = 5;
 
-      for(let i = string.length - 5; (string.at(i - 1) === '0') && (i >= 0); i--) {
+      for(let i = result.length - 5; (result.at(i - 1) === '0') && (i >= 0); i--) {
         numberOfZeros++;
       }
-      return string = string.slice(0, string.length - numberOfZeros) + `e${numberOfZeros}`;
+      
+      return result = result.slice(0, result.length - numberOfZeros) + `e${numberOfZeros}`;
     } else {
-      return string;
+      return result;
     }
   },
 
@@ -124,24 +123,20 @@ const madculator = {
     let randomOrder = this.roll(0, 20).toString();
     fakeButton.setAttribute('style', 'order:' + randomOrder);
 
-    let randomButtonsArrayLenght = inputButtonsValue.length;
-    let randomButtonsArrayIndex = this.roll(0, randomButtonsArrayLenght - 1);
+    let randomButtonsArrayIndex = this.roll(0, inputButtonsValue.length - 1);
     fakeButton.innerHTML = inputButtonsValue[randomButtonsArrayIndex].innerHTML;
 
-    fakeButton.addEventListener('click', 
-      function() {
+    fakeButton.addEventListener('click', () => {
         fakeButton.classList.add('destroy-fake-button');
-      }
-    );
+    });
 
     buttonsContainer.appendChild(fakeButton);
   },
   setRandomOrder() {
     const buttonsArray = document.querySelectorAll('.buttons-container div');
-    let buttonsArrayLenght = buttonsArray.length;
 
-    for(let i = 0; i < buttonsArrayLenght; i++){
-      let randomOrder = this.roll(0, buttonsArrayLenght - 1).toString();
+    for(let i = 0; i < buttonsArray.length; i++){
+      let randomOrder = this.roll(0, buttonsArray.length - 1).toString();
       buttonsArray[i].setAttribute('style', 'order:' + randomOrder);
     }
   },
@@ -197,7 +192,10 @@ const madculator = {
 
 madculator.setButtons(); //Обязательно вызываем методы, чтобы калькулятор появился
 
-//Увы, ивенты сами себе объекты, их придётся по отдельности
+/*
+ ВКЛЮЧЕНИЕ/ВЫКЛЮЧЕНИЕ ДИСПЛЕЯ
+*/
+
 const turnOnButton = document.querySelector('.turn-on');
 const display = document.querySelector('.display');
 
@@ -208,12 +206,17 @@ turnOnButton.addEventListener('click',
       display.classList.remove('on');
       madculator['display-text-value'] = "0";
     } else {
-      display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
+      madculator.refreshMadculator();
+
       display.classList.add('on');
       display.classList.add('starting-value');
     }
   }
 )
+
+/*
+  КНОПКИ ВВОДА ЗНАЧЕНИЯ
+*/
 
 const displayText = document.querySelector('#display-text');
 const madculatorButtons = document.getElementsByClassName('input-button');
@@ -222,35 +225,38 @@ let inputButtons = Array.from(madculatorButtons);
 let inputButtonsValue = Array.from(madculatorButtonsText);
 
 for(let i = 0; i < inputButtons.length; i++) {
-  inputButtons[i].addEventListener('click', 
-    function() {
+  inputButtons[i].addEventListener('click', () => {
       if(!(display.classList.contains('on'))) {
         return;
       } else if(display.classList.contains('starting-value')) {       
         madculator['display-text-value'] = inputButtonsValue[i].innerText;
-        display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag']; //Без этого значения на дисплее не меняются
+
+        madculator.refreshMadculator(); 
         display.classList.remove('starting-value');
       } else {
-        inputButtons[i].classList.contains('methods-button') ? madculator['display-text-value'] = madculator['display-text-value'] + '<span></span>' + inputButtonsValue[i].innerText + '<span></span>': 
-        madculator['display-text-value'] = madculator['display-text-value'] + inputButtonsValue[i].innerText;
-        display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
+        inputButtons[i].classList.contains('methods-button') ? (madculator['display-text-value'] = madculator['display-text-value'] + '<span></span>' + inputButtonsValue[i].innerText + '<span></span>') : 
+        (madculator['display-text-value'] = madculator['display-text-value'] + inputButtonsValue[i].innerText);
+
+        madculator.refreshMadculator();
       }     
-    }
-  );
+    });
 }
 
+/*
+  КНОПКИ УПРАВЛЕНИЯ
+*/
 
 const equalButton = document.querySelector('#equal-button');
 
 equalButton.addEventListener('click',
   function() {
     if(display.classList.contains('on')) {
-      //Используется бибилиотека Math js, чтобы снизить риски безопасности метода eval()
       let result = (madculator.calculate(madculator['display-text-value'])).toString();
       let fixedFractionResult = madculator.fixingFractionLength(result);
 
       madculator['display-text-value'] = madculator.zerosAbbrevation(fixedFractionResult);
-      display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
+
+      madculator.refreshMadculator();
     }  
   }
 );
@@ -262,7 +268,8 @@ clearButton.addEventListener('click',
     if(display.classList.contains('on')) {
       madculator['display-text-value'] = '0';
       display.classList.add('starting-value');
-      display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
+
+      madculator.refreshMadculator();
     } else {
       return;
     }
@@ -282,20 +289,23 @@ deleteButton.addEventListener('click',
         display.classList.add('starting-value');
       }
 
-      display.innerHTML = madculator['display-text-open-tag'] + madculator['display-text-value'] + madculator['display-text-closing-tag'];
+      madculator.refreshMadculator();
     } else {
       return;
     }
   }
 );
 
-//Дальше события madculator'a
+/*
+  СОБЫТИЯ НА КНОПКАХ ДЛЯ ИЗМЕНЕНИЯ MADCULATORA
+*/
+
 const orangeButtons = document.getElementsByClassName('madculator-orange-button');
 const blackButtons = document.getElementsByClassName('madculator-black-button');
 const normalButtons = document.getElementsByClassName('madculator-normal-button');
 
-for(let i = 0; i < orangeButtons.length; i++) {
-  orangeButtons[i].addEventListener('click', 
+for(let button of orangeButtons) {
+  button.addEventListener('click', 
   () => {
     if(display.classList.contains('on')) {
       madculator.createFakeButton('fake-orange-button');
@@ -306,8 +316,8 @@ for(let i = 0; i < orangeButtons.length; i++) {
   });
 }
 
-for(let i = 0; i < blackButtons.length; i++) {
-  blackButtons[i].addEventListener('click', 
+for(let button of blackButtons) {
+  button.addEventListener('click', 
   () => {
     if(display.classList.contains('on')) {
       madculator.createFakeButton('fake-black-button');
@@ -318,8 +328,8 @@ for(let i = 0; i < blackButtons.length; i++) {
   });
 }
 
-for(let i = 0; i < normalButtons.length; i++) {
-  normalButtons[i].addEventListener('click', 
+for(let button of normalButtons) {
+  button.addEventListener('click', 
   () => {
     if(display.classList.contains('on')) {
       madculator.createFakeButton('fake-normal-button');
